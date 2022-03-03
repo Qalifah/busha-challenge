@@ -18,7 +18,7 @@ func NewCharacterRepository(client *pgx.Conn) *characterRepository {
 func (r *characterRepository) Get(ctx context.Context, movieID int, filterArg, sortArg, order *string) ([]*core.Character, error) {
 	var characters []*core.Character
 
-	query := fmt.Sprintf("SELECT * FROM characters WHERE %v IN movies_id", movieID)
+	query := "SELECT * FROM characters WHERE $1 = ANY (movies_id)"
 	if filterArg != nil {
 		query += fmt.Sprintf(" AND gender = %v", *filterArg)
 	}
@@ -26,7 +26,7 @@ func (r *characterRepository) Get(ctx context.Context, movieID int, filterArg, s
 		query += fmt.Sprintf("ORDER BY %v %v", *sortArg, *order)
 	}
 
-	rows, err := r.client.Query(ctx, query)
+	rows, err := r.client.Query(ctx, query, movieID)
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +43,12 @@ func (r *characterRepository) Get(ctx context.Context, movieID int, filterArg, s
 	return characters, nil
 }
 
-func (r *characterRepository) add(ctx context.Context, char *core.Character) error {
-	_, err := r.client.Exec(ctx, "INSERT INTO characters (name, gender, height, movies_id) VALUES ($1, $2, $3, $4)", char.Name, char.Gender, char.Height, char.MoviesID)
-	return err
+func (r *characterRepository) AddMany(ctx context.Context, chars []*core.Character) error {
+	for _, char := range chars {
+		_, err := r.client.Exec(ctx, "INSERT INTO characters (name, gender, height, movies_id) VALUES ($1, $2, $3, $4)", char.Name, char.Gender, char.Height, char.MoviesID)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

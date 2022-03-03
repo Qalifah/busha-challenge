@@ -39,13 +39,14 @@ func (m *movieRepository) GetAll(ctx context.Context) ([]*core.Movie, error) {
 	return movies, nil
 }
 
-func (m *movieRepository) IncreaseCommentCount(ctx context.Context, movieID string) error {
-	movie, err := m.get(ctx, movieID)
+func (m *movieRepository) IncreaseCommentCount(ctx context.Context, movieID int) error {
+	id := strconv.Itoa(movieID)
+	movie, err := m.get(ctx, id)
 	if err != nil {
 		return err
 	}
 	movie.CommentCount++
-	return m.set(ctx, movieID, movie)
+	return m.set(ctx, id, movie)
 }
 
 func (m *movieRepository) get(ctx context.Context, movieID string) (*core.Movie, error) {

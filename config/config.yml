@@ -4,6 +4,10 @@ postgres:
   username: "postgres"
   host: "localhost"
   port: "5432"
-  max_conn: 5
+
+redis:
+  addr: "localhost:6379"
+  password: ""
+  db: 0
 
 serve_port: ":8080"

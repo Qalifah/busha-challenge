@@ -11,8 +11,8 @@ import (
 )
 
 func New(ctx context.Context, config *config.PostgresConfig) (*pgx.Conn, error) {
-	const format = "postgres://%s:%s@%s:%s/%s?sslmode=disable&pool_max_conns=%d"
-	uri := fmt.Sprintf(format, config.Username, config.Password, config.Host, config.Port, config.Database, config.MaxConn)
+	const format = "postgres://%s:%s@%s:%s/%s?sslmode=disable"
+	uri := fmt.Sprintf(format, config.Username, config.Password, config.Host, config.Port, config.Database)
 	conn, err := pgx.Connect(ctx, uri)
 	if err != nil {
 		return nil, err
@@ -28,8 +28,4 @@ func New(ctx context.Context, config *config.PostgresConfig) (*pgx.Conn, error) 
 func createTestDB(ctx context.Context) (*pgx.Conn, error) {
 	testUri := os.Getenv("TEST_DB_URI")
 	return pgx.Connect(ctx, testUri)
-}
-
-func deleteAllComments(ctx context.Context, conn *pgx.Conn, tableName string) {
-	conn.Exec(ctx, fmt.Sprintf("DELETE FROM %v", tableName))
 }

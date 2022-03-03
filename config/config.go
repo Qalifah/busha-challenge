@@ -6,10 +6,16 @@ type PostgresConfig struct {
 	Port     string `yaml:"port"`
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
-	MaxConn  int    `yaml:"max_conn"`
+}
+
+type Redis struct {
+	Addr     string `yaml:"addr"`
+	Password string `yaml:"password"`
+	DB       int    `yaml:"db"`
 }
 
 type BaseConfig struct {
 	ServePort string          `yaml:"serve_port"`
 	Postgres  *PostgresConfig `yaml:"postgres"`
+	Redis     *Redis          `yaml:"redis"`
 }

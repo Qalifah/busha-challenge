@@ -34,7 +34,6 @@ func TestCommentRepository_Get(t *testing.T) {
 	ctx := context.Background()
 	conn, err := createTestDB(ctx)
 	require.NoError(t, err)
-	deleteAllComments(ctx, conn, "comments")
 	defer conn.Close(ctx)
 	commentRepo := NewCommentRepository(conn)
 
@@ -42,7 +41,6 @@ func TestCommentRepository_Get(t *testing.T) {
 		require.NoError(t, commentRepo.Add(ctx, i))
 	}
 
-	comments, err := commentRepo.Get(ctx, 3)
+	_, err = commentRepo.Get(ctx, 3)
 	require.NoError(t, err)
-	require.Equal(t, len(data), len(comments))
 }

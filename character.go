@@ -11,5 +11,6 @@ type Character struct {
 }
 
 type CharacterRepository interface {
-	Get(ctx context.Context, movieID int, filterArg, sortArg string) ([]*Character, error)
+	Get(ctx context.Context, movieID int, filterArg, sortArg, order *string) ([]*Character, error)
+	AddMany(ctx context.Context, chars []*Character) error
 }
