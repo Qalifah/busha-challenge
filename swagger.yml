@@ -1,0 +1,130 @@
+consumes:
+- application/busha-challenge.v1+json
+info:
+  description: An API that serves Starwars data
+  title: Busha Challenge
+  version: 1.0.0
+produces:
+- application/busha-challenge.v1+json
+schemes:
+- http
+- https
+swagger: "2.0"
+paths:
+  /movie:
+    get:
+      tags:
+        - movies
+      responses:
+        200:
+          description: all movies
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/movie"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+  /{movie_id}/comments:
+    get:
+      tags:
+        - comments
+      parameters:
+        - type: integer
+          name: movie_id
+          in: path
+          required: true
+      responses:
+        200:
+          description: all comments in a movie
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/comment"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+  /{movie_id}/comment:
+    post:
+      parameters:
+        - type: integer
+          name: movie_id
+          in: path
+          required: true
+        - type: string
+          name: message
+          in: header
+          required: true
+          maxLength: 500
+      operationId: getComments
+      responses:
+        201:
+          description: comment created successfully
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+  /{movie_id}/character:
+    get:
+      tags:
+        - characters
+      parameters:
+        - type: integer
+          name: movie_id
+          in: path
+          required: true
+        - type: string
+          name: filter
+          in: query
+        - type: string
+          name: sort
+          in: query
+        - type: string
+          name: order
+          in: query
+      responses:
+        200:
+          description: all characters in a movie
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/character"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+definitions:
+  movie:
+    type: object
+    properties:
+      title:
+        type: string
+      opening_crawl:
+        type: string
+      comment_count:
+        type: string
+  comment:
+    type: object
+    properties:
+      message:
+        type: string
+      author_ip_address:
+        type: string
+  character:
+    type: object
+    properties:
+      name:
+        type: string
+      gender:
+        type: string
+      height:
+        type: string
+  error:
+    type: object
+    properties:
+      status:
+        type: string
+      message:
+        type: string
