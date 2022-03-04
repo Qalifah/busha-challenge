@@ -53,6 +53,14 @@ func main() {
 	defer redisClient.Close()
 
 	movieRepository := redis.NewMovieRepository(redisClient)
+	err = handler.PopulateMovieDB(ctx, movieRepository)
+	if err != nil {
+		log.Fatalf("failed to populate movie db: %v", err)
+	}
+	err = handler.PopulateCharacterDB(ctx, characterRepository)
+	if err != nil {
+		log.Fatalf("failed to populate character db: %v", err)
+	}
 
 	ctrl := handler.New(movieRepository, commentRepository, characterRepository)
 	r := router.Setup(ctrl)

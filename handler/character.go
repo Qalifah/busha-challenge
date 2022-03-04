@@ -25,5 +25,10 @@ func (h *Handler) GetCharacters(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, NewResponse("", characters))
+	resp := map[string]interface{}{
+		"data":  characters,
+		"match": len(characters),
+	}
+
+	c.JSON(http.StatusOK, NewResponse("", resp))
 }

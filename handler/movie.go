@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"sort"
 )
 
 var (
@@ -16,5 +17,10 @@ func (h *Handler) GetMovies(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, NewErrorResponse(ErrUnExpectedError))
 		return
 	}
+
+	sort.Slice(movies, func(i, j int) bool {
+		return movies[i].ReleaseDate.Before(movies[j].ReleaseDate)
+	})
+
 	c.JSON(http.StatusOK, NewResponse("all movies successfully returned", movies))
 }
