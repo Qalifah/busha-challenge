@@ -10,7 +10,7 @@ func Setup(handler *handler.Handler) *gin.Engine {
 	r.Use(CORSMiddleware())
 
 	r.GET("/movie", handler.GetMovies)
-	r.GET("/:movie_id/comment", handler.GetComments)
+	r.GET("/:movie_id/comments", handler.GetComments)
 	r.POST("/:movie_id/comment", handler.AddComment)
 	r.GET("/:movie_id/character", handler.GetCharacters)
 

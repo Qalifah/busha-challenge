@@ -14,6 +14,11 @@ services:
     ports:
       - "6379:6379"
 
+  swagger:
+    image: quay.io/goswagger/swagger
+    ports:
+      - "3000:3000"
+
   server:
     build:
       context: .
